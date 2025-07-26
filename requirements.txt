@@ -99,9 +99,7 @@ nltk==3.9.1
 numba==0.61.2
 numpy==1.26.4
 openai==1.97.0
-openai-whisper==20250625
-opencv-contrib-python==4.11.0.86
-opencv-python==4.5.5.64
+openai-whisper==20230314  # or just openai-whisper
 opencv-python-headless==4.7.0.72
 opt_einsum==3.4.0
 optree==0.16.0
