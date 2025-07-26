@@ -17,7 +17,6 @@ import uuid
 import time
 import os
 import av
-import cv2
 
 
 logo_url = "/Users/madhumithas/Downloads/Projects/InterviewChatBot/logo.png"
