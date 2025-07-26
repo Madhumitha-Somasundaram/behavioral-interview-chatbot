@@ -1,0 +1,6 @@
+*.pyc
+__pycache__/
+.env
+venv311/
+audio_responses/
+emotions.txt
