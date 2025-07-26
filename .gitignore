@@ -1,6 +1,7 @@
 *.pyc
 __pycache__/
 .env
+.streamlit/
 venv311/
 audio_responses/
 emotions.txt
