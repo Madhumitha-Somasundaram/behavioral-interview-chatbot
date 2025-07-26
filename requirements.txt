@@ -1,0 +1,14 @@
+SQLAlchemy==2.0.41
+av==14.4.0
+bcrypt==4.3.0
+fer==22.5.1
+langchain-core==0.3.69
+langchain-groq==0.3.6
+langchain==0.3.26
+openai-whisper==20250625
+opencv-python-headless==4.7.0.72
+opencv-python==4.5.5.64
+python-dotenv==1.1.1
+streamlit-webrtc==0.63.3
+streamlit==1.47.0
+whisper
