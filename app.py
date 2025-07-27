@@ -189,7 +189,6 @@ def save_session():
     st.session_state.question_emotions = {}
     st.session_state.viewing_session = False
     reset_question_number()
-    
     st.rerun()
 
 def signup():
@@ -260,7 +259,19 @@ def feedback():
         st.session_state.messages,
         interview_done=True
     )
-    save_session()
+    new_session_id = str(uuid.uuid4())
+    st.session_state.session_id = new_session_id
+    st.session_state.active_session_id = new_session_id
+    st.session_state.messages = []
+    st.session_state.engine = None
+    st.session_state.interview_done = False
+    st.session_state.resume_text = None
+    st.session_state.question_emotions = {}
+    st.session_state.viewing_session = False
+    reset_question_number()
+    st.rerun()
+
+    
 
 def initialize_params():
 
