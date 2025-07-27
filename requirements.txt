@@ -15,7 +15,7 @@ dataclasses-json==0.6.7
 decorator==4.4.2
 facenet-pytorch==2.5.3
 fer==22.5.1
-ffmpeg==1.4
+ffmpeg-python
 groq==0.30.0
 cloud-sql-python-connector
 httpcore==1.0.9
