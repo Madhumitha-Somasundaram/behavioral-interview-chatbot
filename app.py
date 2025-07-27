@@ -450,20 +450,23 @@ else:
                     }
                 ]
             }
+            frame_count = 0
+
             class EmotionProcessor(VideoProcessorBase):
                 def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+                    global frame_count
                     img = frame.to_ndarray(format="bgr24")
-                    results = detector.detect_emotions(img)
-                    if results:
-                        emotions = results[0]["emotions"]
-                        emotion_label = max(emotions, key=emotions.get)
-                        save_emotion(emotion_label)
-                        cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-                        
-                        
-                        
-                        
+                    frame_count += 1
+
+                    if frame_count % 10 == 0:  # process every 10th frame
+                        results = detector.detect_emotions(img)
+                        if results:
+                            emotions = results[0]["emotions"]
+                            emotion_label = max(emotions, key=emotions.get)
+                            save_emotion(emotion_label)
+                            cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
             left_col, right_col = st.columns(2)  
