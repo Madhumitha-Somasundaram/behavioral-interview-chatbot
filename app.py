@@ -464,8 +464,6 @@ else:
                             emotions = results[0]["emotions"]
                             emotion_label = max(emotions, key=emotions.get)
                             save_emotion(emotion_label)
-                            cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
-                                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
 
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
