@@ -177,7 +177,7 @@ def fetch_interview_conversation(session_id):
 emotion_queue = queue.Queue()
 def save_session():
     if (st.session_state.engine and not st.session_state.interview_done and st.session_state.session_id):
-            
+            feedback()
             save_interview_session(
                 st.session_state.session_id,
                 st.session_state.username,
@@ -351,7 +351,6 @@ else:
             st.session_state.engine = InterviewEngine(resume_text, session_id=st.session_state.active_session_id,username=st.session_state.username,api_key=st.session_state.api_key)
 
     if st.sidebar.button("New Interview"):
-            feedback()
             save_session()
 
     if "interview_duration" not in st.session_state:
