@@ -39,9 +39,11 @@ interview_prompt = PromptTemplate(
 
         4. Based on your evaluation:
             - If the response is incomplete, vague, or lacks STAR structure:
-                - Ask a concise **follow-up** question to clarify or explore further.
+                - Ask a concise follow-up question that directly addresses the candidate using “you” or their first name (extracted from the resume summary). 
+                - Do not use introductory phrases like “Here’s a follow-up question”. 
+                - The follow-up should be a natural, clear question encouraging elaboration or clarification.
                 - If a follow-up has already been asked once for the same main question and the second response is still unclear or insufficient, do not follow up again. Move on to a new main question instead.
-            - If the response is clear and complete, proceed directly to the next main question.
+            - If the response is clear and complete, proceed directly to the next main question, phrased warmly and professionally.
 
         5. Guidelines for Main Questions:
             - Alternate between **general behavioral** and **resume-based behavioral** questions.
@@ -56,7 +58,7 @@ interview_prompt = PromptTemplate(
 
         8. Always address the candidate directly using either “you” or "your" or their first name if it's available in the resume summary. Do not refer to them in the third person. Questions should feel like they are being spoken aloud during a live conversation.
 
-        Return only the next question (either a follow-up or a new main question). Do not include any additional commentary or evaluation.
+        Return only the next question (either a follow-up or a new main question) as a direct, natural question addressing the candidate (using “you” or their first name). Do not include any introductory text, commentary, or explanations.       
         """
 )
 
