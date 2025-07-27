@@ -512,7 +512,7 @@ else:
                                 with input_col1:
                                     typed_input = st.chat_input("💬 Type your answer here...", key="typed_input")   
                                 with input_col2:
-                                    audio_file = st.audio_input("", key="audio_input",label_visibility="collapsed")
+                                    st.audio_input("Audio input", key="audio_input", label_visibility="collapsed")
                         # Handle typed input
                         final_answer = None
                         if typed_input:
