@@ -56,6 +56,7 @@ initialize_tables()
 
 frame_count = 0
 frame_lock = threading.Lock()
+latest_emotion_label = None
 @st.cache_resource
 def load_fer():
     return FER(mtcnn=True)
@@ -460,21 +461,26 @@ else:
                 ]
             }
 
+            def async_emotion_detection(img):
+                global latest_emotion_label
+                results = detector.detect_emotions(img)
+                if results:
+                    emotions = results[0]["emotions"]
+                    latest_emotion_label = max(emotions, key=emotions.get)
+                    save_emotion(latest_emotion_label)
 
             class EmotionProcessor(VideoProcessorBase):
                 def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
                     global frame_count
                     img = frame.to_ndarray(format="bgr24")
 
-                    frame_count += 1
-                    if frame_count % 10 == 0:
-                        results = detector.detect_emotions(img)
-                        if results:
-                            emotions = results[0]["emotions"]
-                            emotion_label = max(emotions, key=emotions.get)
-                            save_emotion(emotion_label)
-                        else:
-                            print("No emotion detected")
+                    with frame_lock:
+                        frame_count += 1
+                        process_this = (frame_count % 10 == 0)
+
+                    if process_this:
+                        # Run detection asynchronously to avoid blocking recv()
+                        threading.Thread(target=async_emotion_detection, args=(img,)).start()
 
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
