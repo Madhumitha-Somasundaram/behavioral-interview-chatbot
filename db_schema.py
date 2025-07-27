@@ -41,6 +41,7 @@ def create_interview_sessions_table():
         """))
 
 def initialize_tables():
-    create_asked_questions_table()
     create_users_table()
+    create_asked_questions_table()
+    
     create_interview_sessions_table()

@@ -17,24 +17,22 @@ import uuid
 import time
 import os
 import av
+import cv2
 
 
-logo_url = "/Users/madhumithas/Downloads/Projects/InterviewChatBot/logo.png"
 st.set_page_config(page_title="Behaview",page_icon="/Users/madhumithas/Downloads/Projects/InterviewChatBot/logo.png",  layout="wide")
-
-st.sidebar.image(logo_url)  # Adjust width as needed
 st.markdown(
     """
-    <link href="https://fonts.googleapis.com/css2?family=Fontdiner+Swanky&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     """,
     unsafe_allow_html=True
 )
 st.sidebar.markdown(
     """
     <h1 style='
-        font-family: "Fontdiner Swanky", cursive; 
-        font-size: 40px; 
-        color: #8a6703;  /* gold */
+        font-family: "Inter", sans-serif; 
+        font-size: 50px; 
+        color: #023E42; 
         text-align: center;
         margin-bottom: 10px;
     '>Behaview</h1>
@@ -368,11 +366,21 @@ else:
         
         st.session_state.active_session_id = st.session_state.session_id
         if (st.session_state.engine is None or len(st.session_state.messages) == 0):
-            st.title("Upload Resume to Start Interview")
+            st.markdown("""
+            ### 📋 Interview Instructions
+
+            - 🎥 This is a **webcam-based interview**. Your facial expressions and emotions will be analyzed in real time.
+            - 💬 You can respond to questions using **typed input** or **voice recordings** (via mic).
+            - ⚠️ If your **webcam is inactive for more than 30 seconds**, the interview will end automatically.
+            - 🧠 Try to answer naturally and thoughtfully, your responses will be used to generate feedback at the end.
+
+            """)
+
             api_key = st.text_input("Please enter your Groq API Key", type="password")
             interview_durations = {"30 minutes": 30, "45 minutes": 45, "60 minutes": 60}
             selected_duration = st.selectbox("Choose your interview duration:", list(interview_durations.keys()))
             uploaded_file = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
+
             start_interview = st.button("Start Interview")
             if start_interview:
                 if not uploaded_file:
@@ -380,26 +388,31 @@ else:
                 elif not api_key:
                     st.error("Please enter the API key to start the interview")
                 else:
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tf:
-                        tf.write(uploaded_file.read())
-                        resume_text = parse_resume(tf.name)
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tf:
+                            tf.write(uploaded_file.read())
+                            resume_text = parse_resume(tf.name)
 
-                    st.session_state.resume_text = resume_text
-                    st.session_state.api_key=api_key
-                    st.session_state.engine = InterviewEngine(resume_text, session_id=st.session_state.session_id or str(uuid.uuid4()),username=st.session_state.username,api_key=st.session_state.api_key)
-                    st.session_state.session_id = st.session_state.engine.session_id
-                    st.session_state.active_session_id = st.session_state.session_id
-                    question_num = st.session_state.current_question_number
-                    st.session_state.webcam_last_active = time.time()
-                    st.session_state.interview_started=True
-                    
-                    interview_start_time = datetime.now()
-                    st.session_state.interview_end_time = interview_start_time + timedelta(minutes=interview_durations[selected_duration])
-                    first_question = st.session_state.engine.get_next_question(" ")
-                    st.session_state.messages = [{"role": "assistant", "content": first_question}]
-                    log_asked_question(st.session_state.username, first_question)
-                    st.session_state.interview_done = False
-                    st.rerun()
+                        st.session_state.resume_text = resume_text
+                        st.session_state.api_key = api_key
+                        st.session_state.engine = InterviewEngine(
+                            resume_text,
+                            session_id=st.session_state.session_id or str(uuid.uuid4()),
+                            username=st.session_state.username,
+                            api_key=st.session_state.api_key,
+                        )
+                        st.session_state.session_id = st.session_state.engine.session_id
+                        st.session_state.active_session_id = st.session_state.session_id
+                        st.session_state.webcam_last_active = time.time()
+                        st.session_state.interview_started = True
+
+                        interview_start_time = datetime.now()
+                        st.session_state.interview_end_time = interview_start_time + timedelta(minutes=interview_durations[selected_duration])
+                        first_question = st.session_state.engine.get_next_question(" ")
+                        st.session_state.messages = [{"role": "assistant", "content": first_question}]
+                        log_asked_question(st.session_state.username, first_question)
+                        st.session_state.interview_done = False
+                        
+                        st.rerun()
         else:
 
             AUDIO_SAVE_PATH = "audio_responses"
@@ -432,32 +445,32 @@ else:
                         emotions = results[0]["emotions"]
                         emotion_label = max(emotions, key=emotions.get)
                         save_emotion(emotion_label)
+                        cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+                        
+                        
+                        
                         
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
             left_col, right_col = st.columns(2)  
         
-            with left_col:             
-                webrtc_ctx = webrtc_streamer(
-                    key="simple",
-                    mode=WebRtcMode.SENDRECV,
-                    media_stream_constraints={"video": True, "audio": False},
-                    video_processor_factory=EmotionProcessor ,
-                    rtc_configuration=RTC_CONFIGURATION,
-                )
+            with left_col:
 
-                    # 🕒 Initialize or update last active webcam time
-                if 'webcam_last_active' not in st.session_state:
-                    st.session_state.webcam_last_active = time.time()
+                   if st.session_state.interview_started and not st.session_state.interview_done:
+                        webrtc_ctx = webrtc_streamer(
+                            key="simple",
+                            mode=WebRtcMode.SENDRECV,
+                            media_stream_constraints={"video": True, "audio": False},
+                            video_processor_factory=EmotionProcessor,
+                            rtc_configuration=RTC_CONFIGURATION,
+                        )
+                        # Update last active time
+                        if 'webcam_last_active' not in st.session_state:
+                            st.session_state.webcam_last_active = time.time()
 
-                if webrtc_ctx and webrtc_ctx.state and webrtc_ctx.state.playing:
-                    st.session_state.webcam_last_active = time.time()
-                elif (time.time() - st.session_state.webcam_last_active) < 30 and not st.session_state.interview_done:
-                    with st.spinner("⌛ Please turn on ur camera within 30 seconds to continue the interview"):
-                        time.sleep(30)
-                    st.warning("⛔ Interview ended due to inactive webcam.")
-                    time.sleep(5)
-                    feedback()
+                        if webrtc_ctx and webrtc_ctx.state and webrtc_ctx.state.playing:
+                            st.session_state.webcam_last_active = time.time()
                     
 
             with right_col:
@@ -467,8 +480,15 @@ else:
                         for msg in st.session_state.messages:
                             st.chat_message(msg["role"]).write(msg["content"])
                         
-                        if not webrtc_ctx.state.playing:
+                        if webrtc_ctx is None or not (webrtc_ctx.state and webrtc_ctx.state.playing):
                             st.warning("⚠️ Your webcam is off. Please turn it on to continue the interview.")
+
+                        # Also check inactivity timeout, show warning if webcam inactive for too long (non-blocking)
+                        inactive_seconds = time.time() - st.session_state.webcam_last_active
+                        if inactive_seconds > 30:
+                            st.warning("⛔ Interview ended due to inactive webcam.")
+                            st.session_state.interview_done = True
+                            feedback()
                         
                         # Input section
                         with st._bottom:
