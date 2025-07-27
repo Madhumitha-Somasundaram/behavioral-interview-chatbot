@@ -351,7 +351,9 @@ else:
             st.session_state.engine = InterviewEngine(resume_text, session_id=st.session_state.active_session_id,username=st.session_state.username,api_key=st.session_state.api_key)
 
     if st.sidebar.button("New Interview"):
+            feedback()
             save_session()
+
     if "interview_duration" not in st.session_state:
         st.session_state.interview_duration=900
         
@@ -485,7 +487,7 @@ else:
                         webrtc_ctx = webrtc_streamer(
                             key="simple",
                             mode=WebRtcMode.SENDRECV,
-                            media_stream_constraints={"video": True, "audio": False},
+                            media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 15}, "audio": False},
                             video_processor_factory=EmotionProcessor,
                             rtc_configuration=RTC_CONFIGURATION,
                         )
