@@ -178,13 +178,7 @@ emotion_queue = queue.Queue()
 def save_session():
     if (st.session_state.engine and not st.session_state.interview_done and st.session_state.session_id):
             feedback()
-            save_interview_session(
-                st.session_state.session_id,
-                st.session_state.username,
-                st.session_state.resume_text,
-                st.session_state.messages,
-                interview_done=True,
-            )
+            
     new_session_id = str(uuid.uuid4())
     st.session_state.session_id = new_session_id
     st.session_state.active_session_id = new_session_id
