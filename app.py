@@ -466,11 +466,8 @@ else:
                     global frame_count
                     img = frame.to_ndarray(format="bgr24")
 
-                    with frame_lock:
-                        frame_count += 1
-                        process_this = frame_count % 5 == 0
-
-                    if process_this:
+                    frame_count += 1
+                    if frame_count % 5 == 0:
                         results = detector.detect_emotions(img)
                         if results:
                             emotions = results[0]["emotions"]
