@@ -561,7 +561,6 @@ else:
                                 st.session_state.question_emotions[qnum] = []
                             #Get emotions for each question and store it
                             emotions=read_emotions()
-                            st.write(emotions)
                             reset_emotions()
                             st.session_state.question_emotions[qnum].extend(emotions)
                             st.session_state.current_question_number += 1
