@@ -18,6 +18,8 @@ import time
 import os
 import av
 import cv2
+import threading
+
 
 
 st.set_page_config(page_title="Behaview",page_icon="/Users/madhumithas/Downloads/Projects/InterviewChatBot/logo.png",  layout="wide")
@@ -52,7 +54,8 @@ st.html(
 
 initialize_tables()
 
-
+frame_count = 0
+frame_lock = threading.Lock()
 @st.cache_resource
 def load_fer():
     return FER(mtcnn=True)
@@ -450,20 +453,27 @@ else:
                     }
                 ]
             }
-            frame_count = 0
+
 
             class EmotionProcessor(VideoProcessorBase):
                 def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
                     global frame_count
                     img = frame.to_ndarray(format="bgr24")
-                    frame_count += 1
 
-                    if frame_count % 10 == 0:  # process every 10th frame
+                    with frame_lock:
+                        frame_count += 1
+                        process_this = frame_count % 10 == 0
+
+                    if process_this:
                         results = detector.detect_emotions(img)
                         if results:
                             emotions = results[0]["emotions"]
                             emotion_label = max(emotions, key=emotions.get)
                             save_emotion(emotion_label)
+                            cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+                        else:
+                            print("No emotion detected")
 
                     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
