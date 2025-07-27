@@ -18,12 +18,6 @@ fer==22.5.1
 ffmpeg-python
 groq==0.30.0
 cloud-sql-python-connector
-httpcore==1.0.9
-httpx==0.28.1
-httpx-sse==0.4.1
-imageio==2.37.0
-imageio-ffmpeg==0.6.0
-importlib-metadata==6.11.0
 langchain==0.3.26
 langchain-community==0.3.27
 langchain-core==0.3.69
