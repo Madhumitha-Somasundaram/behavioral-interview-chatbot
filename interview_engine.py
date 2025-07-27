@@ -30,6 +30,9 @@ interview_prompt = PromptTemplate(
 
         1. If this is the beginning of the interview (i.e., no previous conversation or candidate response exists), start by warmly greeting the candidate by their first name, extracted from the resume summary, for example: "Hi, [Name]!" Then generate the first interview question to begin. You may start with either a **general behavioral** or a **resume-based behavioral** question.
 
+            1a. When generating any follow-up or new question, address the candidate directly using “you” ,"your" or their first name (from resume_summary), and never refer to them in the third person (e.g., avoid “the candidate”).
+
+
         2. Otherwise, carefully review the most recent candidate response along with the corresponding question.
 
         3. Evaluate whether the response is:
