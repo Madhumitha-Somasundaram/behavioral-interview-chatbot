@@ -468,7 +468,7 @@ else:
 
                     with frame_lock:
                         frame_count += 1
-                        process_this = frame_count % 10 == 0
+                        process_this = frame_count % 5 == 0
 
                     if process_this:
                         results = detector.detect_emotions(img)
@@ -476,8 +476,6 @@ else:
                             emotions = results[0]["emotions"]
                             emotion_label = max(emotions, key=emotions.get)
                             save_emotion(emotion_label)
-                            cv2.putText(img, f"Emotion: {emotion_label}", (10, 30),
-                                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
                         else:
                             print("No emotion detected")
 
