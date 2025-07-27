@@ -434,9 +434,22 @@ else:
 
 
             RTC_CONFIGURATION = {
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+                "iceServers": [
+                    {"urls": ["stun:us-turn1.xirsys.com"]},
+                    {
+                        "username": st.secrets["xirsys"]["username"],
+                        "credential": st.secrets["xirsys"]["credential"],
+                        "urls": [
+                            "turn:us-turn1.xirsys.com:80?transport=udp",
+                            "turn:us-turn1.xirsys.com:3478?transport=udp",
+                            "turn:us-turn1.xirsys.com:80?transport=tcp",
+                            "turn:us-turn1.xirsys.com:3478?transport=tcp",
+                            "turns:us-turn1.xirsys.com:443?transport=tcp",
+                            "turns:us-turn1.xirsys.com:5349?transport=tcp"
+                        ]
+                    }
+                ]
             }
-
             class EmotionProcessor(VideoProcessorBase):
                 def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
                     img = frame.to_ndarray(format="bgr24")
