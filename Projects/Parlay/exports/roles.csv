@@ -1,0 +1,7 @@
+id,name,custom,description,organization_id,created_at,updated_at
+"cdb8366c-f9ee-4738-8943-d00fe19f66d6","super admin","f","Full access","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",
+"4dfdc753-cfdf-4fdb-848d-76c9663b4c3a","admin","f","Full access","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",
+"ca195266-8057-485c-8860-bb412b8db56e","loan manager","f","Can manage products and inquiries","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",
+"ab8b37a7-5dec-4ac9-9547-9aec47a2f88a","approver","f","Can forward inquiries","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",
+"5b0c73cf-9e3e-4d99-a759-cf40ae5fc15c","viewer","f","Can view inquiries","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",
+"17feb814-a85b-4d52-9260-c66ed65d679c","borrower","f","Can apply for inquiries","d81dc152-c9d3-048b-1572-1f0c4594bf92","2025-09-17 19:27:50.291352+00",

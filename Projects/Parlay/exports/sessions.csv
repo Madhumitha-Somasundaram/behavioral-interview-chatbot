@@ -1,0 +1,2 @@
+id,user_id,expires_at,organization_id,is_authenticated,is_two_factor_verified,user_agent,ip_address,location,last_active_at,created_at,updated_at
+"2e1482697a3261f0f651460edaf1d3a38e22707f96d7232511e1908525a56439","x9b19w5fccdsycoeajkff","2025-09-19 19:16:17.822+00","d81dc152-c9d3-048b-1572-1f0c4594bf92","t","f","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","::1",,"2025-09-18 19:16:17.824389+00","2025-09-18 19:16:17.824389+00","2025-09-18 19:16:17.824389+00"
